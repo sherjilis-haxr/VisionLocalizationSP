@@ -19,7 +19,6 @@ public class AprilTagWebcamExample extends OpMode {
     @Override
     public void loop() {
         aprilTagWebcam.update();
-<<<<<<< Updated upstream
 
         AprilTagDetection id20 = aprilTagWebcam.getTagBySpecificId(20);
 
@@ -30,14 +29,5 @@ public class AprilTagWebcamExample extends OpMode {
         }
 
         telemetry.update();
-=======
-        AprilTagDetection id20 = aprilTagWebcam.getTagBySpecificId(23);
-
-        if (id20 != null) {
-            telemetry.addData("id20 String", id20.toString()); // only runs if tag is actually found
-        } else {
-            telemetry.addData("id20 String", "tag not found"); // safe fallback
-        }
->>>>>>> Stashed changes
     }
 }
