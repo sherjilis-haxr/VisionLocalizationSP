@@ -1,0 +1,27 @@
+package org.firstinspires.ftc.teamcode.mechanisms;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
+import org.firstinspires.ftc.teamcode.mechanisms.AprilTagWebcam;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.teamcode.mechanisms.AprilTagWebcam;
+
+@Autonomous
+public class AprilTagWebcamExample extends OpMode {
+
+    AprilTagWebcam aprilTagWebcam = new AprilTagWebcam();
+
+    @Override
+    public void init() {
+        aprilTagWebcam.init(hardwareMap, telemetry);
+    }
+
+    @Override
+    public void loop() {
+        // update the vision portal
+        aprilTagWebcam.update();
+        AprilTagDetection id20 = aprilTagWebcam.getTagBySpecificId(20);
+        telemetry.addData("caption: \"id20 String\"", id20.toString());
+    }
+}
