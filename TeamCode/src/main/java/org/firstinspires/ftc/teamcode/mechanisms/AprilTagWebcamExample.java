@@ -20,7 +20,7 @@ public class AprilTagWebcamExample extends OpMode {
     public void loop() {
         aprilTagWebcam.update();
 
-        AprilTagDetection id20 = aprilTagWebcam.getTagBySpecificId(20);
+        AprilTagDetection id20 = aprilTagWebcam.getTagBySpecificId(23);
 
         if (id20 != null) {
             aprilTagWebcam.displayDetectionTelemetry(id20);
