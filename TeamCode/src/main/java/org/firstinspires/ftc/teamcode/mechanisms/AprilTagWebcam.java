@@ -76,4 +76,35 @@ public class AprilTagWebcam {
             visionPortal.close();
         }
     }
+    public Double getX(int id) {
+        AprilTagDetection tag = getTagBySpecificId(id);
+        if (tag != null && tag.ftcPose != null) {
+            return tag.ftcPose.x;
+        }
+        return null; // null means tag not found
+    }
+
+    public Double getY(int id) {
+        AprilTagDetection tag = getTagBySpecificId(id);
+        if (tag != null && tag.ftcPose != null) {
+            return tag.ftcPose.y;
+        }
+        return null;
+    }
+
+    public Double getZ(int id) {
+        AprilTagDetection tag = getTagBySpecificId(id);
+        if (tag != null && tag.ftcPose != null) {
+            return tag.ftcPose.z;
+        }
+        return null;
+    }
+
+    public Double getYaw(int id) {
+        AprilTagDetection tag = getTagBySpecificId(id);
+        if (tag != null && tag.ftcPose != null) {
+            return tag.ftcPose.yaw;
+        }
+        return null;
+    }
 }

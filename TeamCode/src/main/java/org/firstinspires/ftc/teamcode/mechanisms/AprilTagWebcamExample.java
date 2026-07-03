@@ -4,12 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.mechanisms.AprilTagWebcam;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.teamcode.mechanisms.Localization;
 
 @Autonomous
 public class AprilTagWebcamExample extends OpMode {
 
     AprilTagWebcam aprilTagWebcam = new AprilTagWebcam();
+    Localization localization = new Localization();
 
     @Override
     public void init() {
@@ -19,13 +20,14 @@ public class AprilTagWebcamExample extends OpMode {
     @Override
     public void loop() {
         aprilTagWebcam.update();
+        localization.update(aprilTagWebcam);
 
-        AprilTagDetection id20 = aprilTagWebcam.getTagBySpecificId(23);
-
-        if (id20 != null) {
-            aprilTagWebcam.displayDetectionTelemetry(id20);
+        if (localization.hasPosition()) {
+            telemetry.addData("Robot X", localization.getRobotX());
+            telemetry.addData("Robot Y", localization.getRobotY());
+            telemetry.addData("Heading", localization.getRobotHeading());
         } else {
-            telemetry.addLine("Tag 20 not visible");
+            telemetry.addLine("No tag visible — position unknown");
         }
 
         telemetry.update();
