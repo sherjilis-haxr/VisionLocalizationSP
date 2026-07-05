@@ -29,19 +29,27 @@ public class Localization {
             AprilTagDetection detection = webcam.getTagBySpecificId(knownTag.id);
 
             if (detection != null && detection.ftcPose != null) {
-                // camera gives us position of tag RELATIVE to robot
-                // x = how far left/right, z = how far forward
-                double camX = detection.ftcPose.x;
-                double camZ = detection.ftcPose.z;
-                double camYaw = detection.ftcPose.yaw;
+                // The camera measures where the tag is compared to us, in inches.
+                //   forward = how far the tag is straight ahead of the camera
+                //   side    = how far the tag is to the RIGHT (left is a negative number)
+                //   yaw     = how twisted the tag looks, in degrees
+                // We ignore the up/down number, so the camera height does not matter here.
+                double forward = detection.ftcPose.y;
+                double side = detection.ftcPose.x;
+                double yaw = detection.ftcPose.yaw;
 
-                // convert tag-relative position into field position
-                // robot is "behind" the tag by however far the camera sees it
-                double tagFacingRad = Math.toRadians(knownTag.heading);
+                // Figure out which way the robot is pointing on the field, in degrees.
+                // The tag faces knownTag.heading. When we stare straight at it we point
+                // the opposite way (that is the + 180), minus how twisted the tag looks.
+                double robotAngle = knownTag.heading + 180 - yaw;
 
-                robotX = knownTag.fieldX + camZ * Math.cos(tagFacingRad) - camX * Math.sin(tagFacingRad);
-                robotY = knownTag.fieldY - camZ * Math.sin(tagFacingRad) - camX * Math.cos(tagFacingRad);
-                robotHeading = knownTag.heading - camYaw;
+                // Change the angle to radians so Math.cos and Math.sin can use it.
+                double robotAngleRad = Math.toRadians(robotAngle);
+
+                // Start at the tag's known field spot, then walk back to where the robot is.
+                robotX = knownTag.fieldX - forward * Math.cos(robotAngleRad) - side * Math.sin(robotAngleRad);
+                robotY = knownTag.fieldY - forward * Math.sin(robotAngleRad) + side * Math.cos(robotAngleRad);
+                robotHeading = robotAngle;
 
                 hasPosition = true;
                 return; // got a fix, no need to check other tags
