@@ -34,7 +34,9 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.opencv.Circle;
 import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
 import org.firstinspires.ftc.vision.opencv.ColorRange;
+import org.firstinspires.ftc.vision.opencv.ColorSpace;
 import org.firstinspires.ftc.vision.opencv.ImageRegion;
+import org.opencv.core.Scalar;
 
 import java.util.List;
 
@@ -68,9 +70,13 @@ import java.util.List;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Disabled
 @TeleOp(name = "Concept: Vision Color-Locator (Circle)", group = "Concept")
 public class ConceptVisionColorLocator_Circle extends LinearOpMode {
+    public static final ColorRange ARTIFACT_YELLOW = new ColorRange(
+            ColorSpace.YCrCb,
+            new Scalar( 32, 128,   0),
+            new Scalar(255, 170, 120)
+    );
     @Override
     public void runOpMode() {
         /* Build a "Color Locator" vision processor based on the ColorBlobLocatorProcessor class.
@@ -130,7 +136,7 @@ public class ConceptVisionColorLocator_Circle extends LinearOpMode {
          *        CLOSING:    Will Dilate and then Erode which will tend to fill in any small holes in blob edges.
          */
         ColorBlobLocatorProcessor colorLocator = new ColorBlobLocatorProcessor.Builder()
-                .setTargetColorRange(ColorRange.ARTIFACT_PURPLE)   // Use a predefined color match
+                .setTargetColorRange(ARTIFACT_YELLOW)   // Use a predefined color match
                 .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)
                 .setRoi(ImageRegion.asUnityCenterCoordinates(-0.75, 0.75, 0.75, -0.75))
                 .setDrawContours(true)   // Show contours on the Stream Preview
@@ -237,6 +243,8 @@ public class ConceptVisionColorLocator_Circle extends LinearOpMode {
                 telemetry.addLine(String.format("%5.3f      %3d     (%3d,%3d)",
                            b.getCircularity(), (int) circleFit.getRadius(), (int) circleFit.getX(), (int) circleFit.getY()));
             }
+
+
 
             telemetry.update();
             sleep(100); // Match the telemetry update interval.
